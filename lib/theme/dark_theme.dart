@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dev_venture/theme/base_theme.dart';
 
-/// Tema escuro do DevVenture.
-///
-/// Inspirado na estética de editores de código dark (VS Code Dark+, Neovim,
-/// terminal). Superfícies em tons de preto esverdeado com accent ciano,
-/// simulando o ambiente de um editor de código em uso.
-///
-/// Todos os valores de cor vêm exclusivamente de [AppThemeTokens].
+/// Dark theme (UI-REF-2026-001)
+/// - canvas: near-neutral dark
+/// - primary: syntaxKeyword (ciano) for system actions
 abstract class AppDarkTheme {
   static ThemeData get theme => ThemeData(
     useMaterial3: true,
@@ -34,43 +30,35 @@ abstract class AppDarkTheme {
 
   // ── ColorScheme ──────────────────────────────────────────────────
   //
-  // Mapeamento semântico Material 3 → tokens DevVenture:
-  //
-  // primary            → syntaxKeyword (ciano) — ações principais
-  // secondary          → neutral300            — ações secundárias
-  // tertiary           → syntaxWarning (âmbar) — alertas e avisos
-  // error              → syntaxError (verm.)   — estados de falha
-  // surface            → neutral800            — cards e superfícies
-  // onSurface          → neutral100            — texto sobre superfície
+  // primary    → syntaxKeyword (ciano)  — ações principais
+  // secondary  → neutral300             — ações secundárias
+  // tertiary   → syntaxWarning (âmbar)  — alertas e avisos
+  // error      → syntaxError (verm.)    — estados de falha
+  // surface    → neutral800             — cards e superfícies
 
   static const _colorScheme = ColorScheme(
     brightness: Brightness.dark,
 
-    // Primary → syntaxKeyword (ciano): botões, FAB, indicadores ativos
     primary: AppThemeTokens.syntaxKeyword,
     onPrimary: AppThemeTokens.brandDark,
     primaryContainer: AppThemeTokens.primaryContainerDark,
     onPrimaryContainer: AppThemeTokens.syntaxKeyword,
 
-    // Secondary → neutros: ações e chips secundários
     secondary: AppThemeTokens.neutral300,
     onSecondary: AppThemeTokens.neutral900,
     secondaryContainer: AppThemeTokens.neutral700,
     onSecondaryContainer: AppThemeTokens.neutral100,
 
-    // Tertiary → syntaxWarning (âmbar): alertas, avisos, atenção
     tertiary: AppThemeTokens.syntaxWarning,
     onTertiary: AppThemeTokens.brandDark,
     tertiaryContainer: AppThemeTokens.amberContainerDark,
     onTertiaryContainer: AppThemeTokens.syntaxWarning,
 
-    // Error → syntaxError (vermelho): erros, senha inválida, negações
     error: AppThemeTokens.errorDark,
     onError: AppThemeTokens.brandDark,
     errorContainer: AppThemeTokens.errorContainerDark,
     onErrorContainer: Color(0xFFFFDAD6),
 
-    // Surface → escala de neutros dark: fundos de cards e containers
     surface: AppThemeTokens.neutral800,
     onSurface: AppThemeTokens.neutral100,
     surfaceContainerLowest: AppThemeTokens.neutral900,
@@ -80,23 +68,21 @@ abstract class AppDarkTheme {
     surfaceContainerHighest: AppThemeTokens.neutral600,
     onSurfaceVariant: AppThemeTokens.neutral300,
 
-    // Outline → branco com baixa opacidade: bordas e divisores sutis
-    outline: Color(0x30FFFFFF),
-    outlineVariant: Color(0x18FFFFFF),
+    // Bordas: branco com baixa opacidade — nunca verde sólido
+    outline: AppThemeTokens.borderDefault,
+    outlineVariant: Color(0x0FFFFFFF), // 6% branco
 
-    // Inverse → para SnackBars e tooltips invertidos
     inverseSurface: AppThemeTokens.neutral100,
     onInverseSurface: AppThemeTokens.neutral900,
     inversePrimary: AppThemeTokens.brandDark,
 
     shadow: Color(0xFF000000),
     scrim: Color(0xFF000000),
-    surfaceTint: AppThemeTokens.syntaxKeyword,
+    surfaceTint: Colors.transparent, // Remove tint verde do Material 3
   );
 
   // ── AppBar ───────────────────────────────────────────────────────
-  // Fundo igual ao scaffold (neutral900) para efeito de continuidade,
-  // simulando a barra de título de um editor de código.
+  // Mesmo fundo do scaffold — continuidade de editor sem linha divisória verde.
   static const _appBarTheme = AppBarTheme(
     backgroundColor: AppThemeTokens.neutral900,
     foregroundColor: AppThemeTokens.neutral100,
@@ -106,36 +92,34 @@ abstract class AppDarkTheme {
   );
 
   // ── Card ─────────────────────────────────────────────────────────
-  // neutral800 para simular painéis/abas de um editor.
-  // Bordas arredondadas sutis (12px) mantêm a estética tech sem ser fria.
+  // neutral800 com borda sutil branca (8%) — painel de editor neutro.
   static final _cardTheme = CardThemeData(
     color: AppThemeTokens.neutral800,
     surfaceTintColor: Colors.transparent,
     elevation: 0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(color: Color(0x20FFFFFF), width: 0.5),
+      side: const BorderSide(color: AppThemeTokens.borderDefault, width: 1),
     ),
   );
 
   // ── Dialog ───────────────────────────────────────────────────────
-  // Dialogs em neutral800 com borda ciano sutil — como um popup de
-  // autocomplete de editor.
+  // neutral800 com borda ciano sutil — popup de autocomplete de editor.
   static final _dialogTheme = DialogThemeData(
     backgroundColor: AppThemeTokens.neutral800,
     surfaceTintColor: Colors.transparent,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
-      side: const BorderSide(
-        color: Color(0x4000FFB2), // brandAccent 25% opacidade
+      side: BorderSide(
+        color: AppThemeTokens.syntaxKeyword.withOpacity(0.25),
         width: 1,
       ),
     ),
   );
 
   // ── ElevatedButton ───────────────────────────────────────────────
-  // Botão primário em ciano (syntaxKeyword) com texto escuro —
-  // o "keyword" mais destacado da interface.
+  // Verde sólido com texto escuro — única instância de verde dominante.
+  // Representa o sinal de "ação principal / sistema operante".
   static final _elevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: AppThemeTokens.syntaxKeyword,
@@ -147,25 +131,23 @@ abstract class AppDarkTheme {
   );
 
   // ── OutlinedButton ───────────────────────────────────────────────
-  // Botão secundário com borda ciano sutil — como uma função não chamada.
+  // Borda cinza neutra — não compete com o botão primário verde.
   static final _outlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      foregroundColor: AppThemeTokens.syntaxKeyword,
-      side: const BorderSide(color: Color(0x6000FFB2)), // ciano 38%
+      foregroundColor: AppThemeTokens.neutral300,
+      side: const BorderSide(color: AppThemeTokens.borderEmphasis),
       shape: const StadiumBorder(),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
     ),
   );
 
   // ── TextButton ───────────────────────────────────────────────────
-  // Ações terciárias em ciano puro.
+  // Ciano para ações terciárias — mantém hierarquia sem abuso de verde.
   static final _textButtonTheme = TextButtonThemeData(
     style: TextButton.styleFrom(foregroundColor: AppThemeTokens.syntaxKeyword),
   );
 
   // ── FAB ──────────────────────────────────────────────────────────
-  // FAB em ciano com bordas levemente arredondadas (não circular)
-  // para manter a estética de editor.
   static const _fabTheme = FloatingActionButtonThemeData(
     backgroundColor: AppThemeTokens.syntaxKeyword,
     foregroundColor: AppThemeTokens.brandDark,
@@ -176,30 +158,36 @@ abstract class AppDarkTheme {
   );
 
   // ── Input ────────────────────────────────────────────────────────
-  // Campo de texto simulando uma linha de input de terminal.
-  // Fundo neutral700, borda de foco em ciano.
+  // neutral700 com borda de foco em ciano — simula linha de terminal ativo.
+  // Borda padrão: branco 8% — nunca verde em repouso.
   static final _inputTheme = InputDecorationTheme(
     filled: true,
     fillColor: AppThemeTokens.neutral700,
-    hintStyle: const TextStyle(color: AppThemeTokens.neutral400),
+    hintStyle: const TextStyle(color: AppThemeTokens.syntaxComment),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: BorderSide.none,
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Color(0x30FFFFFF), width: 0.5),
+      borderSide: const BorderSide(
+        color: AppThemeTokens.borderDefault,
+        width: 1,
+      ),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(
-        color: AppThemeTokens.syntaxKeyword,
+      borderSide: BorderSide(
+        color: AppThemeTokens.syntaxKeyword.withOpacity(0.4),
         width: 1.5,
       ),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: AppThemeTokens.syntaxError, width: 1),
+      borderSide: BorderSide(
+        color: AppThemeTokens.syntaxError.withOpacity(0.4),
+        width: 1,
+      ),
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
@@ -211,23 +199,26 @@ abstract class AppDarkTheme {
   );
 
   // ── Chip ─────────────────────────────────────────────────────────
-  // Chips para categorias (Dart, Flutter, Firebase) com cor de fundo
-  // neutra e label em syntaxFunction (laranja dourado).
+  // Chips de categoria com cor semântica por tecnologia:
+  //   Dart     → syntaxType (azul)
+  //   Flutter  → syntaxString (verde médio)
+  //   Firebase → syntaxWarning (âmbar)
+  // Label em laranja (syntaxFunction) como padrão genérico.
   static final _chipTheme = ChipThemeData(
     backgroundColor: AppThemeTokens.neutral700,
     labelStyle: const TextStyle(
       color: AppThemeTokens.syntaxFunction,
       fontSize: 12,
     ),
-    side: const BorderSide(color: Color(0x30FFCB6B)), // laranja 19%
+    side: const BorderSide(color: AppThemeTokens.borderDefault),
     shape: const StadiumBorder(),
   );
 
   // ── NavigationBar ────────────────────────────────────────────────
-  // Barra de navegação em neutral800 com indicador ciano translúcido.
+  // neutral800 com indicador ciano dim (12%) — só o item ativo recebe verde.
   static final _navigationBarTheme = NavigationBarThemeData(
     backgroundColor: AppThemeTokens.neutral800,
-    indicatorColor: const Color(0x2500FFB2), // ciano 15%
+    indicatorColor: AppThemeTokens.keywordContainerDark,
     iconTheme: WidgetStateProperty.resolveWith(
       (s) => IconThemeData(
         color: s.contains(WidgetState.selected)
@@ -246,22 +237,22 @@ abstract class AppDarkTheme {
   );
 
   // ── TabBar ───────────────────────────────────────────────────────
-  // Abas simulando as tabs de arquivos de um editor de código.
+  // Abas de arquivos de editor — aba ativa em verde, inativas em cinza.
   static const _tabBarTheme = TabBarThemeData(
     labelColor: AppThemeTokens.syntaxKeyword,
-    unselectedLabelColor: AppThemeTokens.neutral400,
+    unselectedLabelColor: AppThemeTokens.syntaxComment,
     indicatorColor: AppThemeTokens.syntaxKeyword,
   );
 
   // ── Divider ──────────────────────────────────────────────────────
-  // Divisores sutis como as linhas de separação de painéis de editor.
+  // Branco 8% — linhas de separação de painel quase invisíveis.
   static const _dividerTheme = DividerThemeData(
-    color: Color(0x15FFFFFF),
-    thickness: 0.5,
+    color: AppThemeTokens.borderDefault,
+    thickness: 1,
   );
 
   // ── Switch ───────────────────────────────────────────────────────
-  // Toggle em ciano quando ativo — como ligar um feature flag.
+  // Verde quando ativo — feature flag ligado.
   static final _switchTheme = SwitchThemeData(
     thumbColor: WidgetStateProperty.resolveWith(
       (s) => s.contains(WidgetState.selected)
@@ -276,7 +267,7 @@ abstract class AppDarkTheme {
   );
 
   // ── Checkbox ─────────────────────────────────────────────────────
-  // Checkbox em ciano — para atividades de seleção múltipla (Somatório).
+  // Verde quando selecionado — atividades de seleção múltipla (Somatório).
   static final _checkboxTheme = CheckboxThemeData(
     fillColor: WidgetStateProperty.resolveWith(
       (s) => s.contains(WidgetState.selected)
@@ -289,7 +280,7 @@ abstract class AppDarkTheme {
   );
 
   // ── SnackBar ─────────────────────────────────────────────────────
-  // SnackBars flutuantes em neutral700 — como mensagens de log no terminal.
+  // neutral700 flutuante — mensagem de log no terminal.
   static const _snackBarTheme = SnackBarThemeData(
     backgroundColor: AppThemeTokens.neutral700,
     contentTextStyle: TextStyle(color: AppThemeTokens.neutral100),
@@ -299,7 +290,7 @@ abstract class AppDarkTheme {
   );
 
   // ── Badge ────────────────────────────────────────────────────────
-  // Badges em roxo (syntaxNumber) para valores numéricos como XP e pontos.
+  // Roxo (syntaxNumber) — valores numéricos como XP e pontos.
   static const _badgeTheme = BadgeThemeData(
     backgroundColor: AppThemeTokens.syntaxNumber,
     textColor: AppThemeTokens.brandDark,

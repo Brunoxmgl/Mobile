@@ -1,5 +1,6 @@
 import 'package:dev_venture/theme/dark_theme.dart';
 import 'package:dev_venture/theme/light_theme.dart';
+import 'package:dev_venture/screens/theme_demo.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -68,9 +69,19 @@ class _MyHomePageState extends State<MyHomePage> {
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+        // App title and demo action
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            tooltip: 'Open theme demo',
+            icon: const Icon(Icons.palette),
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => const ThemeDemoPage()));
+            },
+          ),
+        ],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
